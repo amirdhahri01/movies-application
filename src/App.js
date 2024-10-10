@@ -10,7 +10,9 @@ import removeFavourites from "./Components/RemoveFavourites";
 function App() {
   const [movies, setMovies] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [favourites, setFavourites] = useState([]);
+  const [favourites, setFavourites] = useState(
+    JSON.parse(localStorage.getItem("react-movie-app-favourites"))
+  );
   const getMovieRequest = async (searchValue) => {
     const url = `http://www.omdbapi.com/?i=tt3896198&apikey=f1cce424&s=${searchValue}`;
     const response = await fetch(url);
@@ -19,19 +21,29 @@ function App() {
       setMovies(responseJson.Search);
     }
   };
+
   useEffect(() => {
     getMovieRequest(searchValue);
   }, [searchValue]);
+
+  const saveToLocalSrtorage = (items) => {
+    localStorage.setItem("react-movie-app-favourites", JSON.stringify(items));
+  };
+
   const addFavouriteMovie = (movie) => {
     const newFavouritesList = [...favourites, movie];
     setFavourites(newFavouritesList);
+    saveToLocalSrtorage(newFavouritesList);
   };
+
   const removeFavouriteMovie = (movie) => {
     const newFavouritesList = favourites.filter((favourite) => {
       return favourite.imdbID !== movie.imdbID;
     });
     setFavourites(newFavouritesList);
+    saveToLocalSrtorage(newFavouritesList);
   };
+
   return (
     <div className="container-fluid movie-app">
       <div className="row d-flex align-items-center my-4">
