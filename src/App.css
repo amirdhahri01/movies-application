@@ -5,8 +5,10 @@ body {
 .movie-app > .row {
   overflow-x: auto;
   flex-wrap: nowrap;
+  overflow-y: hidden;
 }
 .image-container {
+  width: fit-content;
   position: relative;
   transition: transform 0.2s;
 }
